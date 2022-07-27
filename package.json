@@ -1,0 +1,21 @@
+{
+  "name": "tempest",
+  "version": "1.0.0",
+  "description": "cli for building custom project templates",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon src/index.js"
+  },
+  "bin": {
+    "tempest": "src/index.js"
+  },
+  "author": "Zennyth",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  },
+  "dependencies": {
+    "inquirer": "^9.0.2"
+  }
+}

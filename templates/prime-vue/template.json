@@ -1,0 +1,8 @@
+{
+  "name": "prime-vue",
+  "technology": "vue",
+  "version": "3",
+  "tempest-ignore": [
+    "node-modules/"
+  ]
+}

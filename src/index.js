@@ -1,88 +1,67 @@
-#!/usr/bin/env node
+import { __templatedir } from './utils/path.js';
 
-import * as fs from 'fs';
-import * as path from 'path';
+import inquirer from 'inquirer';
+import figlet from 'figlet';
+import chalk from 'chalk';
 
-import {fileURLToPath} from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const vue = chalk.hex('#3fb27f');
 
-const CHOICES = fs.readdirSync(path.join(__dirname, 'templates'));
-const QUESTIONS = [
-{
-    name: 'template',
+console.log(vue(figlet.textSync('Tempest', {
+  horizontalLayout: 'default',
+  verticalLayout: 'default',
+  width: 80,
+  whitespaceBreak: true
+})));
+
+const questions = [
+  {
+    name: 'technology',
     type: 'list',
-    message: 'What project template would you like to generate?',
-    choices: CHOICES
-},
-{
+    message: 'What technology would you like to create a project with ?',
+    choices: [
+      'vue',
+      'ABP Framework'
+    ]
+  },
+  {
+    name: 'version',
+    type: 'list',
+    message: 'What version would you like to use ?',
+    choices: [
+      '3',
+      '2'
+    ]
+  },
+  {
     name: 'name',
     type: 'input',
     message: 'Project name:'
-}];
+  },
+  {
+    name: 'options',
+    type: 'checkbox',
+    message: 'Enable options',
+    choices: [
+      'examples',
+      'comments',
+      'typescript ?'
+    ]
+  },
+  {
+    name: 'features',
+    type: 'checkbox',
+    message: 'Select the features to be implemented',
+    choices: [
+      'store',
+      'layout',
+      'http wrapper',
+      'web services',
+      'user authentication',
+      'internationalization',
+    ]
+  }
+];
 
-import * as inquirer from 'inquirer';
-import chalk from 'chalk';
-const prompt = inquirer.createPromptModule();
-
-const CURR_DIR = process.cwd();
-prompt(QUESTIONS)
-.then(answers => {
-    const projectChoice = answers['template'];
-    const projectName = answers['name'];
-    const templatePath = path.join(__dirname, 'templates', projectChoice);
-    const tartgetPath = path.join(CURR_DIR, projectName);
-    const options = {
-        projectName,
-        templateName: projectChoice,
-        templatePath,
-        tartgetPath
-    }
-
-    if (!createProject(tartgetPath)) {
-        return;
-    }
-
-    createDirectoryContents(templatePath, projectName);
-});
-
-
-function createProject(projectPath) {
-    if (fs.existsSync(projectPath)) {
-        console.log(chalk.red(`Folder ${projectPath} exists. Delete or use another name.`));
-        return false;
-    }
-    fs.mkdirSync(projectPath);
-    
-    return true;
-}
-
-// list of file/folder that should not be copied
-const SKIP_FILES = ['node_modules', '.template.json'];
-function createDirectoryContents(templatePath, projectName) {
-    // read all files/folders (1 level) from template folder
-    const filesToCreate = fs.readdirSync(templatePath);
-    // loop each file/folder
-    filesToCreate.forEach(file => {
-        const origFilePath = path.join(templatePath, file);
-        
-        // get stats about the current file
-        const stats = fs.statSync(origFilePath);
-    
-        // skip files that should not be copied
-        if (SKIP_FILES.indexOf(file) > -1) return;
-        
-        if (stats.isFile()) {
-            // read file content and transform it using template engine
-            let contents = fs.readFileSync(origFilePath, 'utf8');
-            // write file to destination folder
-            const writePath = path.join(CURR_DIR, projectName, file);
-            fs.writeFileSync(writePath, contents, 'utf8');
-        } else if (stats.isDirectory()) {
-            // create folder in destination folder
-            fs.mkdirSync(path.join(CURR_DIR, projectName, file));
-            // copy files/folder inside current folder recursively
-            createDirectoryContents(path.join(templatePath, file), path.join(projectName, file));
-        }
-    });
-}
+inquirer
+  .prompt(questions)
+  .then(answers => console.log(answers))

@@ -5,17 +5,18 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon src/index.js"
+    "start": "node src/index.js"
   },
   "bin": {
     "tempest": "src/index.js"
   },
   "author": "Zennyth",
   "license": "ISC",
-  "devDependencies": {
-    "nodemon": "^2.0.19"
-  },
   "dependencies": {
-    "inquirer": "^9.0.2"
+    "chalk": "^5.0.0",
+    "figlet": "^1.5.2",
+    "gradient-string": "2.0.0",	
+    "inquirer": "^8.2.0",
+    "nanospinner": "1.0.0"	
   }
 }
